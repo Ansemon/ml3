@@ -62,7 +62,6 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="&lt;no title&gt;" href="cuadernos/codigo_no_sem.html" />
-    <link rel="prev" title="Notebooks with MyST Markdown" href="markdown-notebooks.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -182,10 +181,7 @@
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Guías y Contenido General</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Welcome to your Jupyter Book</a></li>
-<li class="toctree-l1"><a class="reference internal" href="markdown.html">Markdown Files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notebooks.html">Content with notebooks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="markdown-notebooks.html">Notebooks with MyST Markdown</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Script de Procesamiento de Datos</a></li>
 </ul>
 
@@ -400,6 +396,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codigo-del-script">Código del Script</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#procesamiento-regresion">procesamiento Regresion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#procesamiento-clasificacion">Procesamiento Clasificacion</a></li>
 </ul>
             </nav>
         </div>
@@ -413,10 +411,12 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="script-de-procesamiento-de-datos">
 <h1>Script de Procesamiento de Datos<a class="headerlink" href="#script-de-procesamiento-de-datos" title="Link to this heading">#</a></h1>
-<p>A continuación se muestra el contenido del script utilizado para el procesamiento de datos.</p>
+<p>A continuación se muestra el contenido del script utilizado para el procesamiento de datos, primero para regresion y luego para clasificacion.</p>
 <section id="codigo-del-script">
 <h2>Código del Script<a class="headerlink" href="#codigo-del-script" title="Link to this heading">#</a></h2>
-<p>Puedes descargar el script <a class="reference internal" href="#procesamiento_script.py"><span class="xref myst">aquí</span></a>.</p>
+</section>
+<section id="procesamiento-regresion">
+<h2>procesamiento Regresion<a class="headerlink" href="#procesamiento-regresion" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -519,6 +519,127 @@ document.write(`
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Procesamiento completado exitosamente!&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columnas en el dataset:&quot;</span><span class="p">,</span> <span class="n">grouped</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+</pre></div>
+</div>
+</section>
+<section id="procesamiento-clasificacion">
+<h2>Procesamiento Clasificacion<a class="headerlink" href="#procesamiento-clasificacion" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--- Iniciando la generación del dataset &#39;grouped&#39; para modelado de severidad ---&quot;</span><span class="p">)</span>
+
+<span class="c1"># 1. Cargar datos y filtrar California</span>
+<span class="n">df_raw</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;accidentes.csv&quot;</span><span class="p">)</span> <span class="c1"># Ensure correct path</span>
+<span class="n">df_raw</span><span class="p">[</span><span class="s2">&quot;Start_Time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_raw</span><span class="p">[</span><span class="s2">&quot;Start_Time&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+
+<span class="n">df_california</span> <span class="o">=</span> <span class="n">df_raw</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">df_raw</span><span class="p">[</span><span class="s2">&quot;State&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CA&quot;</span><span class="p">)</span>
+    <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_raw</span><span class="p">[</span><span class="s2">&quot;Start_Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">())</span>
+    <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_raw</span><span class="p">[</span><span class="s2">&quot;Start_Lat&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">())</span>
+    <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_raw</span><span class="p">[</span><span class="s2">&quot;Start_Lng&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">())</span>
+<span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="s1">&#39;Severity&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df_california</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: Columna &#39;Severity&#39; no encontrada. No se puede proceder.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">()</span>
+<span class="n">df_california</span><span class="p">[</span><span class="s1">&#39;severity_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_california</span><span class="p">[</span><span class="s1">&#39;Severity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distribución de &#39;severity_class&#39; en datos crudos de CA:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_california</span><span class="p">[</span><span class="s1">&#39;severity_class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+
+<span class="c1"># 2. Parámetros clave</span>
+<span class="n">GRID_SIZE</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">MIN_YEARS</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># Para filtrar zonas después de la agregación</span>
+
+<span class="c1"># 3. Bins espaciales</span>
+<span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;lat_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;Start_Lat&quot;</span><span class="p">]</span> <span class="o">//</span> <span class="n">GRID_SIZE</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;lng_bin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;Start_Lng&quot;</span><span class="p">]</span> <span class="o">//</span> <span class="n">GRID_SIZE</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;zone_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;lat_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;lng_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+<span class="c1"># 4. Procesamiento temporal</span>
+<span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;year_week&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;Start_Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%U&quot;</span><span class="p">)</span>
+
+<span class="c1"># 5. Variables derivadas</span>
+<span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;is_weekend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;Start_Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">dayofweek</span><span class="o">.</span><span class="n">ge</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;is_night&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_california</span><span class="p">[</span><span class="s2">&quot;Start_Time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">hour</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># 6. Variables climáticas extremas</span>
+<span class="n">clim_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Temperature(F)&quot;</span><span class="p">,</span> <span class="s2">&quot;Wind_Speed(mph)&quot;</span><span class="p">,</span> <span class="s2">&quot;Precipitation(in)&quot;</span><span class="p">,</span> <span class="s2">&quot;Humidity(%)&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">clim_vars</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">df_california</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">df_california</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df_california</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">df_california</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">threshold</span> <span class="o">=</span> <span class="n">df_california</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)</span>
+            <span class="n">df_california</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">_extreme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_california</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">threshold</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df_california</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">_extreme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df_california</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">_extreme&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># 7. Agregación inicial (Esta es la base para tu modelado)</span>
+<span class="n">agg_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;accident_count&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;max_severity_class&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;severity_class&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Start_Lat&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Start_Lat&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Start_Lng&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Start_Lng&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;lat_bin&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;lat_bin&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;lng_bin&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;lng_bin&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">),</span>
+    <span class="c1"># Ensure only existing columns are aggregated</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">clim_vars</span> <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">df_california</span><span class="o">.</span><span class="n">columns</span><span class="p">},</span>
+    <span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">_extreme&quot;</span><span class="p">:</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">_extreme&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">clim_vars</span><span class="p">},</span> <span class="c1"># _extreme columns were created</span>
+    <span class="o">**</span><span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Junction&quot;</span><span class="p">,</span> <span class="s2">&quot;Railway&quot;</span><span class="p">,</span> <span class="s2">&quot;Roundabout&quot;</span><span class="p">,</span> <span class="s2">&quot;Station&quot;</span><span class="p">,</span> <span class="s2">&quot;Stop&quot;</span><span class="p">,</span> <span class="s2">&quot;Traffic_Signal&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">df_california</span><span class="o">.</span><span class="n">columns</span><span class="p">},</span>
+    <span class="s2">&quot;is_night&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;is_night&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;is_weekend&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;is_weekend&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">final_agg_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">agg_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">df_california</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">k</span><span class="o">==</span><span class="s2">&quot;accident_count&quot;</span><span class="p">}</span> <span class="c1"># Simplified check</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">final_agg_dict</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: No valid aggregation operations. Check input columns.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">()</span>
+
+<span class="n">grouped</span> <span class="o">=</span> <span class="n">df_california</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;zone_id&quot;</span><span class="p">,</span> <span class="s2">&quot;year_week&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="o">**</span><span class="n">final_agg_dict</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="s1">&#39;max_severity_class&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">grouped</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: &#39;max_severity_class&#39; no fue agregada. Verifique &#39;severity_class&#39; en los datos crudos y la lógica de agregación.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">()</span>
+
+<span class="n">grouped</span><span class="p">[</span><span class="s1">&#39;severity_binary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grouped</span><span class="p">[</span><span class="s1">&#39;max_severity_class&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">notna</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">grouped</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;max_severity_class&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Distribución de &#39;severity_binary&#39; en &#39;grouped&#39; (solo zone-weeks con accidentes):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">grouped</span><span class="p">[</span><span class="s1">&#39;severity_binary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">grouped</span><span class="p">[</span><span class="s1">&#39;severity_binary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+
+<span class="c1"># Add year and week for filtering and sorting</span>
+<span class="n">temp_split_yw</span> <span class="o">=</span> <span class="n">grouped</span><span class="p">[</span><span class="s1">&#39;year_week&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">grouped</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_split_yw</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">grouped</span><span class="p">[</span><span class="s1">&#39;week&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_split_yw</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">temp_split_yw</span>
+
+<span class="c1"># 11. Filtrar zonas con suficiente historia (aplicado a &#39;grouped&#39;)</span>
+<span class="n">zone_years</span> <span class="o">=</span> <span class="n">grouped</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;zone_id&quot;</span><span class="p">)[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="c1">#nunique on year column</span>
+<span class="n">valid_zones</span> <span class="o">=</span> <span class="n">zone_years</span><span class="p">[</span><span class="n">zone_years</span> <span class="o">&gt;=</span> <span class="n">MIN_YEARS</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<span class="n">modeling_df</span> <span class="o">=</span> <span class="n">grouped</span><span class="p">[</span><span class="n">grouped</span><span class="p">[</span><span class="s2">&quot;zone_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">valid_zones</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># Use .copy()</span>
+
+<span class="c1"># Optional: Calcular límites geográficos (si los necesitas como features)</span>
+<span class="k">if</span> <span class="s1">&#39;lat_bin&#39;</span> <span class="ow">in</span> <span class="n">modeling_df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">and</span> <span class="s1">&#39;lng_bin&#39;</span> <span class="ow">in</span> <span class="n">modeling_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">modeling_df</span><span class="p">[</span><span class="s2">&quot;lat_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">modeling_df</span><span class="p">[</span><span class="s2">&quot;lat_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">GRID_SIZE</span>
+    <span class="n">modeling_df</span><span class="p">[</span><span class="s2">&quot;lat_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">modeling_df</span><span class="p">[</span><span class="s2">&quot;lat_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">GRID_SIZE</span>
+    <span class="n">modeling_df</span><span class="p">[</span><span class="s2">&quot;lng_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">modeling_df</span><span class="p">[</span><span class="s2">&quot;lng_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">GRID_SIZE</span>
+    <span class="n">modeling_df</span><span class="p">[</span><span class="s2">&quot;lng_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">modeling_df</span><span class="p">[</span><span class="s2">&quot;lng_bin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">GRID_SIZE</span>
+
+<span class="c1"># Guardar este DataFrame para el modelado</span>
+<span class="n">output_filename</span> <span class="o">=</span> <span class="s2">&quot;revisedds.csv&quot;</span>
+<span class="n">modeling_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Dataset para modelado guardado en: </span><span class="si">{</span><span class="n">output_filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columnas:&quot;</span><span class="p">,</span> <span class="n">modeling_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Forma:&quot;</span><span class="p">,</span> <span class="n">modeling_df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distribución final de &#39;severity_binary&#39; en el CSV guardado (solo semanas activas):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">modeling_df</span><span class="p">[</span><span class="s1">&#39;severity_binary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">modeling_df</span><span class="p">[</span><span class="s1">&#39;severity_binary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">())</span>
 </pre></div>
 </div>
 </section>
@@ -554,15 +675,6 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="markdown-notebooks.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Notebooks with MyST Markdown</p>
-      </div>
-    </a>
     <a class="right-next"
        href="cuadernos/codigo_no_sem.html"
        title="next page">
@@ -589,6 +701,8 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codigo-del-script">Código del Script</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#procesamiento-regresion">procesamiento Regresion</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#procesamiento-clasificacion">Procesamiento Clasificacion</a></li>
 </ul>
   </nav></div>
 
