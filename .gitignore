@@ -1,0 +1,21 @@
+# Jupyter Book & Sphinx
+docs/_build/
+docs/.jupyter_cache/
+docs/*/_build/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+ml_venv/ # Tu entorno virtual
+
+# Cachés y archivos de sistema operativo
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints/
+
+# Archivos de editores
+.vscode/
+.idea/
+*.swp

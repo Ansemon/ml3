@@ -1,9 +1,23 @@
 # Table of contents
 # Learn more at https://jupyterbook.org/customize/toc.html
+# Archivo de Tabla de Contenidos para el Jupyter Book
+# Para más información, visita: [https://jupyterbook.org/structure/toc.html](https://jupyterbook.org/structure/toc.html)
 
 format: jb-book
-root: intro
-chapters:
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
+root: landing_page # Tu nueva página de inicio
+
+parts:
+  - caption: Guías y Contenido General
+    chapters:
+      - file: intro # La que antes era la introducción principal
+      - file: markdown
+      - file: notebooks # El .ipynb que ya tenías en /docs
+      - file: markdown-notebooks # El .md sobre notebooks
+      - file: procesamiento_script # Si elegiste la Opción A para el script
+
+  - caption: Cuadernos de Análisis y Modelado
+    chapters:
+      - file: cuadernos/codigo_no_sem
+      - file: cuadernos/modelo_original1
+      - file: cuadernos/modelos_v2
+      - file: cuadernos/optimizados

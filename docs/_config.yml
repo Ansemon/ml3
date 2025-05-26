@@ -1,32 +1,43 @@
-# Book settings
-# Learn more at https://jupyterbook.org/customize/config.html
+# Archivo de Configuración del Libro
+# Aprende más en [https://jupyterbook.org/configure/config.html](https://jupyterbook.org/configure/config.html)
 
-title: My sample book
-author: The Jupyter Book Community
-logo: logo.png
+title: Proyecto de prediccion de accidentes (ml3) # Título de tu libro
+author: Adriam # Tu nombre o usuario
+logo: logo.png # Ya tienes este archivo en ml3/docs/logo.png
 
-# Force re-execution of notebooks on each build.
-# See https://jupyterbook.org/content/execute.html
+# Opciones de ejecución de los notebooks
 execute:
-  execute_notebooks: force
+  execute_notebooks: 'off' # Opciones: 'auto', 'force', 'cache', 'off'
+  # 'off' es más rápido para construir si no necesitas re-ejecutar los notebooks cada vez.
+  # 'cache' es bueno para desarrollo, re-ejecuta solo si el código cambia.
 
-# Define the name of the latex output file for PDF builds
-latex:
-  latex_documents:
-    targetname: book.tex
+# Opciones del Parseador MyST (Markdown)
+parse:
+  myst_enable_extensions:
+    - colon_fence # Permite directivas como ```{note}
+    - dollarmath # Para ecuaciones LaTeX con $...$ y $$...$$
+    - linkify # Convierte URLs en texto en enlaces
+    - substitution # Para definir sustituciones globales
+    - tasklist # Para listas de tareas con [ ] y [x]
+  myst_url_schemes: [mailto, http, https]
 
-# Add a bibtex file so that we can create citations
-bibtex_bibfiles:
-  - references.bib
-
-# Information about where the book exists on the web
-repository:
-  url: https://github.com/executablebooks/jupyter-book  # Online location of your book
-  path_to_book: docs  # Optional path to your book, relative to the repository root
-  branch: master  # Which branch of the repository should be used when creating links (optional)
-
-# Add GitHub buttons to your book
-# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+# Opciones HTML
 html:
-  use_issues_button: true
-  use_repository_button: true
+  favicon: logo.png # Opcional: usa tu logo como favicon
+  use_edit_page_button: true # Opcional: botón para sugerir ediciones (necesita repo_url)
+  use_repository_button: true # Opcional: botón al repositorio (necesita repo_url)
+  use_issues_button: true # Opcional: botón para abrir issues (necesita repo_url)
+  #baseurl: "" # Si tu sitio está en un subdirectorio en producción (no usual con GitHub Pages y ghp-import)
+
+# Configuración para botones de repositorio (QoL)
+repository:
+  url: https://github.com/Ansemon/ml3 # URL de tu repositorio
+  path_to_book: docs # Ruta a la carpeta del libro dentro del repo
+  branch: main # Rama donde están los fuentes del libro
+
+# Añadir un pie de página simple (Opcional QoL)
+# html:
+#   extra_footer: |
+#     <div>
+#       <p>Contenido creado por Ansemon. Licencia (pon tu licencia aquí).</p>
+#     </div>
